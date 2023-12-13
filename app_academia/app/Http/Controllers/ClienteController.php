@@ -8,59 +8,101 @@ use App\Http\Requests\UpdateClienteRequest;
 
 class ClienteController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(Cliente $cliente)
+    {
+        $this->cliente = $cliente;
+    }
+
     public function index()
     {
-        //
+        $cliente = $this->cliente->all();
+        return $cliente;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreClienteRequest $request)
     {
-        //
+        $request->validate($this->cliente->rules(), $this->cliente->feedback());
+
+        $cliente = $this->cliente->create([
+            'nome' => $request->nome,
+            'sobrenome' => $request->sobrenome,
+            'data_nascimento' => $request->data_nascimento,
+            'sexo' => $request->sexo,
+            'altura' => $request->altura,
+            'peso' => $request->peso,
+            'cidade' => $request->cidade,
+            'endereco' => $request->endereco,
+            'rua' => $request->rua,
+            'numero' => $request->numero,
+            'complemento' => $request->complemento,
+            'telefone1' => $request->telefone1,
+            'telefone2' => $request->telefone2,
+            'email' => $request->email
+        ]);
+
+
+        return $cliente;
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cliente $cliente)
+
+    public function show($id)
     {
-        //
+
+        $cliente = $this->cliente->find($id);
+        if ($cliente === null) {
+            return response()->json(['erro' => 'Recurso Não Encontrado'], 404);
+        }
+        return $cliente;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Cliente $cliente)
+
+    public function update(UpdateClienteRequest $request, $id)
     {
-        //
+        //return ['erro' => 'update'];
+        $cliente = $this->cliente->find($id);
+
+        if ($cliente === null) {
+            return response()->json(['erro' => 'Não foi possivel atualizar o arquivo, o mesmo não existe'], 404);
+        }
+
+        if ($request->method() === 'PATCH') {
+            $regrasDinamicas = array();
+            foreach ($cliente->rules() as $input => $regra) {
+                if (array_key_exists($input, $request->all())) {
+                    $regrasDinamica[$input] = $regra;
+                }
+            }
+            $request->validate($regrasDinamicas, $cliente->feedback());
+        } else {
+            $request->validate($cliente->rules(), $cliente->feedback());
+        }
+
+
+        $cliente->update([
+            'nome' => $request->nome,
+            'sobrenome' => $request->sobrenome,
+            'data_nascimento' => $request->data_nascimento,
+            'sexo' => $request->sexo,
+            'altura' => $request->altura,
+            'peso' => $request->peso,
+            'cidade' => $request->cidade,
+            'endereco' => $request->endereco,
+            'rua' => $request->rua,
+            'numero' => $request->numero,
+            'complemento' => $request->complemento,
+            'telefone1' => $request->telefone1,
+            'telefone2' => $request->telefone2,
+            'email' => $request->email
+        ]);
+        return $cliente;
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateClienteRequest $request, Cliente $cliente)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Cliente $cliente)
-    {
-        //
+        $cliente = $this->cliente->find($id);
+        if ($cliente === null) {
+            return response()->json(['erro' => 'Não foi possivel excuir arquivo, o mesmo não existe'], 404);
+        }
+        $cliente->delete();
     }
 }
