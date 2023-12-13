@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AcademiaController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\MatriculaController;
 use App\Http\Controllers\PlanoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,3 +24,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('cliente', ClienteController::class);
 Route::apiResource('academia', AcademiaController::class);
 Route::apiResource('plano', PlanoController::class);
+Route::apiResource('matricula', MatriculaController::class);

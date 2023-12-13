@@ -38,4 +38,9 @@ class Cliente extends Model
             'nome.min' => 'Nome deve ter no minimo 3 letras'
         ];
     }
+
+    public function matriculas()
+    {
+        return $this->hasMany(Matricula::class);
+    }
 }

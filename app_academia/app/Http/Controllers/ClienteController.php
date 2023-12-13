@@ -48,7 +48,7 @@ class ClienteController extends Controller
     public function show($id)
     {
 
-        $cliente = $this->cliente->find($id);
+        $cliente = $this->cliente->with('matriculas')->find($id);
         if ($cliente === null) {
             return response()->json(['erro' => 'Recurso Não Encontrado'], 404);
         }
