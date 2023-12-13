@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('academias', function (Blueprint $table) {
             $table->id();
+            $table->string('nome', 30);
+            $table->string('endereco')->nullable();
+            $table->string('telefone1', 14)->nullable();
+            $table->string('telefone2', 14)->nullable();
+            $table->string('email')->unique()->nullable();
             $table->timestamps();
         });
     }
